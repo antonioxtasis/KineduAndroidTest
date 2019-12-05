@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.antoniocordova.kineduandroidtest">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:hardwareAccelerated="true"
         android:largeHeap="true"
@@ -16,7 +18,9 @@
         android:theme="@style/AppTheme">
         <activity android:name=".ui.articles.ArticlesActivity" />
         <activity android:name=".ui.article_detail.ArticleDetailActivity" />
-        <activity android:name=".ui.activities.ActivitiesActivity" />
+        <activity
+            android:name=".ui.main.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".ui.SplashActivity"
             android:screenOrientation="portrait"

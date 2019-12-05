@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.antoniocordova.kineduandroidtest.R;
-import com.antoniocordova.kineduandroidtest.ui.activities.ActivitiesActivity;
+import com.antoniocordova.kineduandroidtest.ui.main.MainActivity;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -23,7 +23,7 @@ public class SplashActivity extends AppCompatActivity {
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
-                startActivity(new Intent(SplashActivity.this, ActivitiesActivity.class));
+                startActivity(new Intent(SplashActivity.this, MainActivity.class));
                 finish();
             }
         };
