@@ -1,4 +1,4 @@
 package com.antoniocordova.kineduandroidtest.ui.articles;
 
-public class ArticlesPresenterImpl {
+public class ArticlesPresenterImpl implements ArticlesPresenter{
 }

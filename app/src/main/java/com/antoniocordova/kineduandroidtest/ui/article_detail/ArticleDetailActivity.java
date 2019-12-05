@@ -1,7 +1,10 @@
 package com.antoniocordova.kineduandroidtest.ui.article_detail;
 
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
+
+import com.antoniocordova.kineduandroidtest.R;
 
 public class ArticleDetailActivity extends AppCompatActivity {
 

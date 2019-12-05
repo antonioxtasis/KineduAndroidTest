@@ -1,9 +1,8 @@
-package aegis.io.network.api;
+package com.antoniocordova.kineduandroidtest.network.api;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
-import aegis.io.app.MyApplication;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -13,8 +12,8 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClient {
-    private static final String TAG = RetrofitClient.class.getSimpleName();
-    private static final String API_BASE_URL = "https://aegischain.herokuapp.com/api/"; //"http://demo8322189.mockable.io/"; // "https://aegischain.io/api/1.0/";
+    private static final String API_BASE_URL = "http://staging.kinedu.com/api/v3/";
+    private static final String API_TOKEN = "Token token=5105f4358e45f6f98057a654c882b7742c3ac5241c81a706acc48c84f8acde9f8a344993ac42369627ae9f2caf1eed42ff1be9562fe2167c9c80908e76e95c49";
 
     private static Retrofit retrofit = null;
 
@@ -28,10 +27,7 @@ public class RetrofitClient {
                     Request original = chain.request();
 
                     Request.Builder builder = original.newBuilder();
-
-                    if(MyApplication.jwtIsAuth){
-                        builder.header("Authorization", ("Bearer " + MyApplication.jwtToken));
-                    }
+                    builder.header("Authorization", API_TOKEN);
 
                     Request request = builder
                             .method(original.method(), original.body())
