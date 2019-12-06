@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.antoniocordova.kineduandroidtest.R;
 import com.antoniocordova.kineduandroidtest.ui.activities.ActivitiesFragment;
+import com.antoniocordova.kineduandroidtest.ui.articles.ArticlesFragment;
 
 
 public class TabsPagerAdapter extends FragmentPagerAdapter {
@@ -32,7 +33,7 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
             case 0:
                 return ActivitiesFragment.newInstance();
             case 1:
-                return ActivitiesFragment.newInstance();
+                return ArticlesFragment.newInstance();
             default:
                 return null;
         }

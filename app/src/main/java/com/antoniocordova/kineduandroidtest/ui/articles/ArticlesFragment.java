@@ -1,15 +1,13 @@
-package com.antoniocordova.kineduandroidtest.ui.activities;
+package com.antoniocordova.kineduandroidtest.ui.articles;
 
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,7 +16,8 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.antoniocordova.kineduandroidtest.R;
-import com.antoniocordova.kineduandroidtest.network.ActivitiesResponse;
+import com.antoniocordova.kineduandroidtest.db.models.Article;
+import com.antoniocordova.kineduandroidtest.network.ArticlesResponse;
 import com.bumptech.glide.Glide;
 import com.github.vivchar.rendererrecyclerviewadapter.RendererRecyclerViewAdapter;
 import com.github.vivchar.rendererrecyclerviewadapter.binder.ViewBinder;
@@ -26,27 +25,27 @@ import com.github.vivchar.rendererrecyclerviewadapter.binder.ViewProvider;
 
 import java.util.ArrayList;
 
-public class ActivitiesFragment extends Fragment {
+public class ArticlesFragment extends Fragment {
 
-    private ActivitiesPresenter presenter;
+    private ArticlesPresenter presenter;
 
     private Activity context;
 
-    private ArrayList<com.antoniocordova.kineduandroidtest.db.models.Activity> arrActivities = new ArrayList<>();
+    private ArrayList<Article> arrArticles = new ArrayList<>();
 
     private RendererRecyclerViewAdapter mRecyclerViewAdapter;
     private RecyclerView mRecyclerView;
 
-    public ActivitiesFragment(){}
+    public ArticlesFragment(){}
 
     public static Fragment newInstance() {
-        return new ActivitiesFragment();
+        return new ArticlesFragment();
     }
 
     // Interface
-    private Listener mCallback;
+    private ArticlesFragment.Listener mCallback;
     public interface Listener {
-        //void onActivitySelected(Module model);
+        //void onArticleSelected(Module model);
     }
 
     @Override
@@ -57,7 +56,7 @@ public class ActivitiesFragment extends Fragment {
         // the callback interface. If not, it throws an exception
         try {
             mCallback = (Listener) activity;
-            presenter = (ActivitiesPresenter) activity;
+            presenter = (ArticlesPresenter) activity;
         } catch (ClassCastException e) {
             e.printStackTrace();
         }
@@ -72,7 +71,7 @@ public class ActivitiesFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_activities, container, false);
+        return inflater.inflate(R.layout.fragment_articles, container, false);
     }
 
     @Override
@@ -88,46 +87,44 @@ public class ActivitiesFragment extends Fragment {
     private void setupMVP() {
 
         // MVP Architectural Pattern logic
-        presenter = new ActivitiesPresenterImpl(new ActivitiesPresenterImpl.IViewEvents() {
-
+        presenter = new ArticlesPresenterImpl(new ArticlesPresenterImpl.IViewEvents() {
             @Override
-            public void onGetActivities(ActivitiesResponse response) {
-                arrActivities = response.getData().getActivities();
-                mRecyclerViewAdapter.setItems(arrActivities);
+            public void onGetArticles(ArticlesResponse response) {
+                arrArticles = response.getData().getArticles();
+                mRecyclerViewAdapter.setItems(arrArticles);
                 mRecyclerViewAdapter.notifyDataSetChanged();
             }
 
             @Override
             public void onError(String errorMessage) {
-                Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show();
+
             }
         });
 
-        // Get activities list
-        presenter.getActivities();
+        // Get articles list
+        presenter.getArticles();
     }
 
     private void initRecyclerView() {
         new Handler().post(() -> {
             mRecyclerViewAdapter = new RendererRecyclerViewAdapter();
-            mRecyclerView = (RecyclerView) context.findViewById(R.id.recyclerview_activities);
+            mRecyclerView = (RecyclerView) context.findViewById(R.id.recyclerview_articles);
             mRecyclerView.setLayoutManager(new GridLayoutManager(context, 1));
             mRecyclerView.setAdapter(mRecyclerViewAdapter);
             mRecyclerViewAdapter.registerRenderer(new ViewBinder<>(
-                    R.layout.item_activity,
-                    com.antoniocordova.kineduandroidtest.db.models.Activity.class,
+                    R.layout.item_article,
+                    Article.class,
                     (model, finder, payloads) -> finder
-                            .find(R.id.img_activity_thumbnail, (ViewProvider<ImageView>) imgThumbnail -> {
-                                Glide.with(context).load(model.getThumbnail()).into(imgThumbnail);
+                            .find(R.id.img_article_thumbnail, (ViewProvider<ImageView>) imgThumbnail -> {
+                                Glide.with(context).load(model.getPicture()).into(imgThumbnail);
                             })
 //                            .find(R.id.ll_item_module, (ViewProvider<LinearLayout>) llItemModule -> {
 //                                llItemModule.setOnClickListener(v -> {
-//                                    //Display batches
-//                                    mCallback.onModuleSelected(model);
+//                                    mCallback.onArticleSelected(model);
 //                                });
 //                            })
-                            .setText(R.id.tv_activity_name, model.getName())
-                            .setText(R.id.tv_activity_purpose, model.getPurpose())
+                            .setText(R.id.tv_article_name, model.getName())
+                            .setText(R.id.tv_article_short_description, model.getShortDescription())
             ));
         });
     }
