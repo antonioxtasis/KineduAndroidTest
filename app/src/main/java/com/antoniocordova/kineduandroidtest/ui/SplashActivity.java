@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import com.antoniocordova.kineduandroidtest.R;
 import com.antoniocordova.kineduandroidtest.ui.main.MainActivity;
+import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -24,6 +25,7 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void run() {
                 startActivity(new Intent(SplashActivity.this, MainActivity.class));
+                Animatoo.animateInAndOut(SplashActivity.this);
                 finish();
             }
         };

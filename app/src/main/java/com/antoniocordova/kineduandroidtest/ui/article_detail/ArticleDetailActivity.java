@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.antoniocordova.kineduandroidtest.R;
 import com.antoniocordova.kineduandroidtest.db.models.Article;
 import com.antoniocordova.kineduandroidtest.network.ArticleDetailResponse;
+import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.bumptech.glide.Glide;
 
 public class ArticleDetailActivity extends AppCompatActivity {
@@ -110,6 +111,7 @@ public class ArticleDetailActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        finish();
+        super.onBackPressed();
+        Animatoo.animateSwipeRight(this);
     }
 }

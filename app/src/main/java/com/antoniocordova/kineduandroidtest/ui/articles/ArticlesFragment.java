@@ -21,6 +21,7 @@ import com.antoniocordova.kineduandroidtest.R;
 import com.antoniocordova.kineduandroidtest.db.models.Article;
 import com.antoniocordova.kineduandroidtest.network.ArticlesResponse;
 import com.antoniocordova.kineduandroidtest.ui.article_detail.ArticleDetailActivity;
+import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.bumptech.glide.Glide;
 import com.github.vivchar.rendererrecyclerviewadapter.RendererRecyclerViewAdapter;
 import com.github.vivchar.rendererrecyclerviewadapter.binder.ViewBinder;
@@ -126,6 +127,7 @@ public class ArticlesFragment extends Fragment {
                                     context.startActivity(new Intent(context, ArticleDetailActivity.class)
                                             .putExtra("article", model)
                                     );
+                                    Animatoo.animateSwipeLeft(context);
                                 });
                             })
                             .setText(R.id.tv_article_name, model.getName())
