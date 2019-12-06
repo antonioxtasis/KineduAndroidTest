@@ -1,31 +1,32 @@
 <resources>
     <string name="app_name">Kinedu Android Test</string>
-    <string name="activities">Activities</string>
-    <string name="articles">Articles</string>
-    <string name="crawling">Crawling</string>
-    <string name="error_no_internet">No internet connection</string>
-    <string name="error_retrieving_data_from_server">Error retrieving data from server</string>
     <array name="array_filter_age">
-        <item>ALL MONTHS</item>
-        <item>0-1 MONTH</item>
-        <item>2 MONTHS</item>
-        <item>3 MONTHS</item>
-        <item>4 MONTHS</item>
-        <item>5 MONTHS</item>
-        <item>6 MONTHS</item>
-        <item>7 MONTHS</item>
-        <item>8 MONTHS</item>
-        <item>9 MONTHS</item>
-        <item>10 MONTHS</item>
-        <item>11 MONTHS</item>
-        <item>12 MONTHS</item>
-        <item>13 MONTHS</item>
-        <item>14 MONTHS</item>
-        <item>15 MONTHS</item>
-        <item>16 MONTHS</item>
-        <item>17 MONTHS</item>
-        <item>18 MONTHS</item>
-        <item>19 MONTHS</item>
-        <item>20 MONTHS</item>
+        <item>TODOS LOS MESES</item>
+        <item>0-1 MES</item>
+        <item>2 MESES</item>
+        <item>3 MESES</item>
+        <item>4 MESES</item>
+        <item>5 MESES</item>
+        <item>6 MESES</item>
+        <item>7 MESES</item>
+        <item>8 MESES</item>
+        <item>9 MESES</item>
+        <item>10 MESES</item>
+        <item>11 MESES</item>
+        <item>12 MESES</item>
+        <item>13 MESES</item>
+        <item>14 MESES</item>
+        <item>15 MESES</item>
+        <item>16 MESES</item>
+        <item>17 MESES</item>
+        <item>18 MESES</item>
+        <item>19 MESES</item>
+        <item>20 MESES</item>
     </array>
+    <string name="articles">Artículos</string>
+    <string name="crawling">Catálogo</string>
+    <string name="error_no_internet">No hay conexión a Internet</string>
+    <string name="error_retrieving_data_from_server">Error al obtener datos desde el Servidor</string>
+    <string name="activities">Actividades</string>
+    <string name="loading_data">Cargando datos...</string>
 </resources>

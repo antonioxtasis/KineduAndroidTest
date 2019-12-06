@@ -84,7 +84,7 @@ public class ArticleDetailActivity extends AppCompatActivity {
         if(htmlContent!=null){
             // Load html data in webview
             final ProgressDialog progressDialog = new ProgressDialog(this);
-            progressDialog.setMessage("Loading Data...");
+            progressDialog.setMessage(getResources().getString(R.string.loading_data));
             progressDialog.setCancelable(false);
 
             webViewBody.requestFocus();
