@@ -2,4 +2,28 @@
     <string name="app_name">Kinedu Android Test</string>
     <string name="activities">Activities</string>
     <string name="articles">Articles</string>
+    <string name="crawling">Crawling</string>
+    <array name="array_filter_age">
+        <item>ALL MONTHS</item>
+        <item>0-1 MONTH</item>
+        <item>2 MONTHS</item>
+        <item>3 MONTHS</item>
+        <item>4 MONTHS</item>
+        <item>5 MONTHS</item>
+        <item>6 MONTHS</item>
+        <item>7 MONTHS</item>
+        <item>8 MONTHS</item>
+        <item>9 MONTHS</item>
+        <item>10 MONTHS</item>
+        <item>11 MONTHS</item>
+        <item>12 MONTHS</item>
+        <item>13 MONTHS</item>
+        <item>14 MONTHS</item>
+        <item>15 MONTHS</item>
+        <item>16 MONTHS</item>
+        <item>17 MONTHS</item>
+        <item>18 MONTHS</item>
+        <item>19 MONTHS</item>
+        <item>20 MONTHS</item>
+    </array>
 </resources>
