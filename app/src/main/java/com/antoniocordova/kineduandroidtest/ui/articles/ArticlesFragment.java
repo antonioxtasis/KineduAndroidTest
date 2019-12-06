@@ -2,12 +2,14 @@ package com.antoniocordova.kineduandroidtest.ui.articles;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.antoniocordova.kineduandroidtest.R;
 import com.antoniocordova.kineduandroidtest.db.models.Article;
 import com.antoniocordova.kineduandroidtest.network.ArticlesResponse;
+import com.antoniocordova.kineduandroidtest.ui.article_detail.ArticleDetailActivity;
 import com.bumptech.glide.Glide;
 import com.github.vivchar.rendererrecyclerviewadapter.RendererRecyclerViewAdapter;
 import com.github.vivchar.rendererrecyclerviewadapter.binder.ViewBinder;
@@ -45,7 +48,7 @@ public class ArticlesFragment extends Fragment {
     // Interface
     private ArticlesFragment.Listener mCallback;
     public interface Listener {
-        //void onArticleSelected(Module model);
+        void onArticleSelected(Article model);
     }
 
     @Override
@@ -80,7 +83,6 @@ public class ArticlesFragment extends Fragment {
         context = getActivity();
 
         initRecyclerView();
-
         setupMVP();
     }
 
@@ -118,11 +120,14 @@ public class ArticlesFragment extends Fragment {
                             .find(R.id.img_article_thumbnail, (ViewProvider<ImageView>) imgThumbnail -> {
                                 Glide.with(context).load(model.getPicture()).into(imgThumbnail);
                             })
-//                            .find(R.id.ll_item_module, (ViewProvider<LinearLayout>) llItemModule -> {
-//                                llItemModule.setOnClickListener(v -> {
-//                                    mCallback.onArticleSelected(model);
-//                                });
-//                            })
+                            .find(R.id.ll_container_article, (ViewProvider<LinearLayout>) llItem -> {
+                                llItem.setOnClickListener(v -> {
+                                    //mCallback.onArticleSelected(model);
+                                    context.startActivity(new Intent(context, ArticleDetailActivity.class)
+                                            .putExtra("article", model)
+                                    );
+                                });
+                            })
                             .setText(R.id.tv_article_name, model.getName())
                             .setText(R.id.tv_article_short_description, model.getShortDescription())
             ));

@@ -1,7 +1,7 @@
 package com.antoniocordova.kineduandroidtest.network.api;
 
 import com.antoniocordova.kineduandroidtest.network.ActivitiesResponse;
-import com.antoniocordova.kineduandroidtest.network.ArticleResponse;
+import com.antoniocordova.kineduandroidtest.network.ArticleDetailResponse;
 import com.antoniocordova.kineduandroidtest.network.ArticlesResponse;
 
 import io.reactivex.Observer;
@@ -81,12 +81,12 @@ public class ApiUtils {
                 .getArticleDetail(articleId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<ArticleResponse>() {
+                .subscribe(new Observer<ArticleDetailResponse>() {
                     @Override
                     public void onSubscribe(Disposable d) { }
 
                     @Override
-                    public void onNext(ArticleResponse response) {
+                    public void onNext(ArticleDetailResponse response) {
                         callback.onSuccess(response);
                     }
 

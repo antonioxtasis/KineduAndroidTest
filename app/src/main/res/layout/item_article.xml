@@ -12,6 +12,7 @@
     card_view:cardElevation="4dp" >
 
     <LinearLayout
+        android:id="@+id/ll_container_article"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">

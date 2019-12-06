@@ -4,7 +4,7 @@ import com.antoniocordova.kineduandroidtest.db.models.Article;
 
 import java.util.ArrayList;
 
-public class ArticlesResponse {
+public class ArticlesResponse extends BaseResponse{
     public class Data {
         int id;
         String name;

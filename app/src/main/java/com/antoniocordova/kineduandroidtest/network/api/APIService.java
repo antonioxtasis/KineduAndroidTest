@@ -1,7 +1,7 @@
 package com.antoniocordova.kineduandroidtest.network.api;
 
 import com.antoniocordova.kineduandroidtest.network.ActivitiesResponse;
-import com.antoniocordova.kineduandroidtest.network.ArticleResponse;
+import com.antoniocordova.kineduandroidtest.network.ArticleDetailResponse;
 import com.antoniocordova.kineduandroidtest.network.ArticlesResponse;
 
 import io.reactivex.Observable;
@@ -17,5 +17,5 @@ public interface APIService {
     Observable<ArticlesResponse> getArticles();
 
     @GET("articles/{articleId}")
-    Observable<ArticleResponse> getArticleDetail(@Path("articleId") long articleId);
+    Observable<ArticleDetailResponse> getArticleDetail(@Path("articleId") long articleId);
 }
