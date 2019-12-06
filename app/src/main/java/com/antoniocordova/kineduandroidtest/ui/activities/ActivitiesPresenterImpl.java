@@ -11,7 +11,7 @@ public class ActivitiesPresenterImpl implements ActivitiesPresenter{
 
     public interface IViewEvents {
         void onGetActivities(ActivitiesResponse response);
-        void onError(String errorMessage);
+        void onError(Throwable e);
     }
 
     /**
@@ -38,8 +38,8 @@ public class ActivitiesPresenterImpl implements ActivitiesPresenter{
             }
 
             @Override
-            public void onError(String errorMessage) {
-                view.onError(errorMessage);
+            public void onError(Throwable e) {
+                view.onError(e);
             }
         });
     }

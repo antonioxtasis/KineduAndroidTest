@@ -11,11 +11,11 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 
 import com.antoniocordova.kineduandroidtest.R;
+import com.antoniocordova.kineduandroidtest.app.MessageEvent;
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.google.android.material.tabs.TabLayout;
 
-import java.util.Arrays;
-import java.util.List;
+import org.greenrobot.eventbus.EventBus;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -44,8 +44,7 @@ public class MainActivity extends AppCompatActivity {
                 new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                        //travel_type = String.valueOf(adapterView.getItemAtPosition(i));
-                        //Toast.makeText(Plan_Trip.this, travel_type, Toast.LENGTH_SHORT).show();
+                        EventBus.getDefault().post(new MessageEvent(MessageEvent.Option.AGE_FILTERED, i));
                     }
 
                     @Override

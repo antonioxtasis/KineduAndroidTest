@@ -19,6 +19,8 @@ import com.antoniocordova.kineduandroidtest.network.ArticleDetailResponse;
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.bumptech.glide.Glide;
 
+import java.net.UnknownHostException;
+
 public class ArticleDetailActivity extends AppCompatActivity {
 
     ArticleDetailPresenter presenter;
@@ -66,7 +68,12 @@ public class ArticleDetailActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onError(String errorMessage) {
+            public void onError(Throwable e) {
+                // Validate and manage diferent errors
+                String errorMessage = getResources().getString(R.string.error_retrieving_data_from_server);
+                if(e instanceof UnknownHostException){
+                    errorMessage = getResources().getString(R.string.error_no_internet);
+                }
                 Toast.makeText(ArticleDetailActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
             }
         });

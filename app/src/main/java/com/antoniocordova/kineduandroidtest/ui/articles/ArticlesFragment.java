@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,6 +19,8 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.antoniocordova.kineduandroidtest.R;
+import com.antoniocordova.kineduandroidtest.app.MessageEvent;
+import com.antoniocordova.kineduandroidtest.app.MyUtils;
 import com.antoniocordova.kineduandroidtest.db.models.Article;
 import com.antoniocordova.kineduandroidtest.network.ArticlesResponse;
 import com.antoniocordova.kineduandroidtest.ui.article_detail.ArticleDetailActivity;
@@ -27,16 +30,19 @@ import com.github.vivchar.rendererrecyclerviewadapter.RendererRecyclerViewAdapte
 import com.github.vivchar.rendererrecyclerviewadapter.binder.ViewBinder;
 import com.github.vivchar.rendererrecyclerviewadapter.binder.ViewProvider;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 public class ArticlesFragment extends Fragment {
 
     private ArticlesPresenter presenter;
-
     private Activity context;
 
     private ArrayList<Article> arrArticles = new ArrayList<>();
-
     private RendererRecyclerViewAdapter mRecyclerViewAdapter;
     private RecyclerView mRecyclerView;
 
@@ -46,20 +52,11 @@ public class ArticlesFragment extends Fragment {
         return new ArticlesFragment();
     }
 
-    // Interface
-    private ArticlesFragment.Listener mCallback;
-    public interface Listener {
-        void onArticleSelected(Article model);
-    }
-
     @Override
     public void onAttach(Context activity) {
         super.onAttach(activity);
 
-        // This makes sure that the container activity has implemented
-        // the callback interface. If not, it throws an exception
         try {
-            mCallback = (Listener) activity;
             presenter = (ArticlesPresenter) activity;
         } catch (ClassCastException e) {
             e.printStackTrace();
@@ -69,7 +66,6 @@ public class ArticlesFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        mCallback = null;
     }
 
     @Nullable
@@ -87,8 +83,45 @@ public class ArticlesFragment extends Fragment {
         setupMVP();
     }
 
-    private void setupMVP() {
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onAgeFilteredMessageEvent(MessageEvent event) {
+        switch (event.getOption()){
+            case MessageEvent.Option.AGE_FILTERED:
+                // filter activities by age
+                int age = event.getAgeOption();
+                if(age==0){
+                    mRecyclerViewAdapter.setItems(arrArticles);
+                } else {
+                    // TODO - improve: implement stream
+                    try {
+                        ArrayList<Article> result = new ArrayList<>();
+                        result.clear();
+                        for (Article x: arrArticles) {
+                            if (age >= x.getMinAge() && age <= x.getMaxAge()) {
+                                result.add(x);
+                            }
+                        }
+                        mRecyclerViewAdapter.setItems(result);
+                    } catch (Exception e) {}
+                }
+                mRecyclerViewAdapter.notifyDataSetChanged();
+                break;
+        }
+    };
+
+    private void setupMVP() {
         // MVP Architectural Pattern logic
         presenter = new ArticlesPresenterImpl(new ArticlesPresenterImpl.IViewEvents() {
             @Override
@@ -96,11 +129,23 @@ public class ArticlesFragment extends Fragment {
                 arrArticles = response.getData().getArticles();
                 mRecyclerViewAdapter.setItems(arrArticles);
                 mRecyclerViewAdapter.notifyDataSetChanged();
+                MyUtils.SharedPrefereces.saveArticlesArray(context, arrArticles);
             }
 
             @Override
-            public void onError(String errorMessage) {
+            public void onError(Throwable e) {
+                // Validate and manage diferent errors
+                String errorMessage = context.getResources().getString(R.string.error_retrieving_data_from_server);
+                if(e instanceof UnknownHostException){
+                    errorMessage = context.getResources().getString(R.string.error_no_internet);
+                }
 
+                Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show();
+
+                // If error: retrieve data from SharedPreferences
+                arrArticles = MyUtils.SharedPrefereces.getArticlesArray(context);
+                mRecyclerViewAdapter.setItems(arrArticles);
+                mRecyclerViewAdapter.notifyDataSetChanged();
             }
         });
 
@@ -123,7 +168,6 @@ public class ArticlesFragment extends Fragment {
                             })
                             .find(R.id.ll_container_article, (ViewProvider<LinearLayout>) llItem -> {
                                 llItem.setOnClickListener(v -> {
-                                    //mCallback.onArticleSelected(model);
                                     context.startActivity(new Intent(context, ArticleDetailActivity.class)
                                             .putExtra("article", model)
                                     );
@@ -135,5 +179,4 @@ public class ArticlesFragment extends Fragment {
             ));
         });
     }
-
 }

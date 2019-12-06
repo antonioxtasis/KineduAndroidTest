@@ -10,7 +10,7 @@ public class ArticlesPresenterImpl implements ArticlesPresenter{
 
     public interface IViewEvents {
         void onGetArticles(ArticlesResponse response);
-        void onError(String errorMessage);
+        void onError(Throwable e);
     }
 
     /**
@@ -37,8 +37,8 @@ public class ArticlesPresenterImpl implements ArticlesPresenter{
             }
 
             @Override
-            public void onError(String errorMessage) {
-                view.onError(errorMessage);
+            public void onError(Throwable e) {
+                view.onError(e);
             }
         });
     }

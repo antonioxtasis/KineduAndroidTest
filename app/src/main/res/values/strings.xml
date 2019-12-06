@@ -3,6 +3,8 @@
     <string name="activities">Activities</string>
     <string name="articles">Articles</string>
     <string name="crawling">Crawling</string>
+    <string name="error_no_internet">No internet connection</string>
+    <string name="error_retrieving_data_from_server">Error retrieving data from server</string>
     <array name="array_filter_age">
         <item>ALL MONTHS</item>
         <item>0-1 MONTH</item>

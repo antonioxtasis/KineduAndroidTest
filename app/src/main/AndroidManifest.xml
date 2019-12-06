@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.antoniocordova.kineduandroidtest">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name=".app.MyApplication"
         android:hardwareAccelerated="true"
         android:largeHeap="true"
         android:usesCleartextTraffic="true"
@@ -31,5 +33,4 @@
             </intent-filter>
         </activity>
     </application>
-
 </manifest>

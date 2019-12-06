@@ -19,7 +19,7 @@ public class ApiUtils {
 
     public interface BasicListener {
         void onSuccess(Object response);
-        void onError(String errorMessage);
+        void onError(Throwable errorMessage);
     }
 
     /**************************************
@@ -44,7 +44,7 @@ public class ApiUtils {
 
                     @Override
                     public void onError(Throwable e) {
-                        callback.onError(e.getMessage());
+                        callback.onError(e);
                     }
 
                     @Override
@@ -68,7 +68,7 @@ public class ApiUtils {
 
                     @Override
                     public void onError(Throwable e) {
-                        callback.onError(e.getMessage());
+                        callback.onError(e);
                     }
 
                     @Override
@@ -92,7 +92,7 @@ public class ApiUtils {
 
                     @Override
                     public void onError(Throwable e) {
-                        callback.onError(e.getMessage());
+                        callback.onError(e);
                     }
 
                     @Override

@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,12 +17,19 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.antoniocordova.kineduandroidtest.R;
+import com.antoniocordova.kineduandroidtest.app.MessageEvent;
+import com.antoniocordova.kineduandroidtest.app.MyUtils;
 import com.antoniocordova.kineduandroidtest.network.ActivitiesResponse;
 import com.bumptech.glide.Glide;
 import com.github.vivchar.rendererrecyclerviewadapter.RendererRecyclerViewAdapter;
 import com.github.vivchar.rendererrecyclerviewadapter.binder.ViewBinder;
 import com.github.vivchar.rendererrecyclerviewadapter.binder.ViewProvider;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 public class ActivitiesFragment extends Fragment {
@@ -43,30 +49,15 @@ public class ActivitiesFragment extends Fragment {
         return new ActivitiesFragment();
     }
 
-    // Interface
-    private Listener mCallback;
-    public interface Listener {
-        //void onActivitySelected(Module model);
-    }
-
     @Override
     public void onAttach(Context activity) {
         super.onAttach(activity);
 
-        // This makes sure that the container activity has implemented
-        // the callback interface. If not, it throws an exception
         try {
-            mCallback = (Listener) activity;
             presenter = (ActivitiesPresenter) activity;
         } catch (ClassCastException e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mCallback = null;
     }
 
     @Nullable
@@ -81,12 +72,48 @@ public class ActivitiesFragment extends Fragment {
         context = getActivity();
 
         initRecyclerView();
-
         setupMVP();
     }
 
-    private void setupMVP() {
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onAgeFilteredMessageEvent(MessageEvent event) {
+        switch (event.getOption()){
+            case MessageEvent.Option.AGE_FILTERED:
+                // filter activities by age
+                int age = event.getAgeOption();
+                if(age==0){
+                    mRecyclerViewAdapter.setItems(arrActivities);
+                } else {
+                    // TODO - improve: implement stream
+                    try {
+                        ArrayList<com.antoniocordova.kineduandroidtest.db.models.Activity> result = new ArrayList<>();
+                        result.clear();
+                        for (com.antoniocordova.kineduandroidtest.db.models.Activity x: arrActivities) {
+                            if (x.getAge() == age) {
+                                result.add(x);
+                            }
+                        }
+                        mRecyclerViewAdapter.setItems(result);
+                    } catch (Exception e) {}
+                }
+                mRecyclerViewAdapter.notifyDataSetChanged();
+                break;
+        }
+    };
+
+    private void setupMVP() {
         // MVP Architectural Pattern logic
         presenter = new ActivitiesPresenterImpl(new ActivitiesPresenterImpl.IViewEvents() {
 
@@ -95,11 +122,23 @@ public class ActivitiesFragment extends Fragment {
                 arrActivities = response.getData().getActivities();
                 mRecyclerViewAdapter.setItems(arrActivities);
                 mRecyclerViewAdapter.notifyDataSetChanged();
+                MyUtils.SharedPrefereces.saveActivitiesArray(context, arrActivities);
             }
 
             @Override
-            public void onError(String errorMessage) {
-                Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show();
+            public void onError(Throwable e) {
+                // Validate and manage diferent errors
+                String errorMessage = context.getResources().getString(R.string.error_retrieving_data_from_server);
+                if(e instanceof UnknownHostException){
+                    errorMessage = context.getResources().getString(R.string.error_no_internet);
+                }
+
+                Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show();
+
+                // If error: retrieve data from SharedPreferences
+                arrActivities = MyUtils.SharedPrefereces.getActivitiesArray(context);
+                mRecyclerViewAdapter.setItems(arrActivities);
+                mRecyclerViewAdapter.notifyDataSetChanged();
             }
         });
 
@@ -120,16 +159,9 @@ public class ActivitiesFragment extends Fragment {
                             .find(R.id.img_activity_thumbnail, (ViewProvider<ImageView>) imgThumbnail -> {
                                 Glide.with(context).load(model.getThumbnail()).into(imgThumbnail);
                             })
-//                            .find(R.id.ll_item_module, (ViewProvider<LinearLayout>) llItemModule -> {
-//                                llItemModule.setOnClickListener(v -> {
-//                                    //Display batches
-//                                    mCallback.onModuleSelected(model);
-//                                });
-//                            })
                             .setText(R.id.tv_activity_name, model.getName())
                             .setText(R.id.tv_activity_purpose, model.getPurpose())
             ));
         });
     }
-
 }
